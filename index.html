@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zentrix Academy</title>
+
+<style>
+body{
+margin:0;
+font-family:sans-serif;
+background:#0f172a;
+color:white;
+}
+
+.section{display:none;padding:15px;}
+.active{display:block;}
+
+input,select{
+width:100%;
+padding:10px;
+margin-top:8px;
+border-radius:10px;
+border:none;
+}
+
+button{
+background:#22c55e;
+color:white;
+border:none;
+padding:10px;
+margin-top:10px;
+border-radius:10px;
+width:100%;
+}
+
+.card{
+background:#1e293b;
+padding:12px;
+border-radius:12px;
+margin-top:10px;
+}
+
+.nav{
+position:fixed;
+bottom:0;
+width:100%;
+background:#1e293b;
+display:flex;
+justify-content:space-around;
+padding:10px;
+}
+
+img{
+width:100%;
+border-radius:10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- REGISTER -->
+<div id="register" class="section active">
+<h2>📋 Create Account</h2>
+
+<input id="name" placeholder="Full Name">
+<input id="phone" placeholder="Phone Number">
+
+<select id="country">
+<option>Country</option>
+<option>Tanzania</option>
+</select>
+
+<input id="region" placeholder="Mkoa">
+<input id="district" placeholder="Wilaya">
+
+<select id="gender">
+<option>Gender</option>
+<option>Male</option>
+<option>Female</option>
+</select>
+
+<input id="education" placeholder="Education Level">
+<input type="date" id="dob">
+
+<input id="idNumber" placeholder="ID Number">
+
+<label>Upload Profile Picture</label>
+<input type="file" id="photo">
+
+<button onclick="register()">Register</button>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="section">
+<h2>🔐 Login</h2>
+<input id="loginName" placeholder="Enter Name">
+<button onclick="login()">Login</button>
+</div>
+
+<!-- HOME -->
+<div id="home" class="section">
+
+<div class="card">
+<h3 id="welcome"></h3>
+<img id="profilePic">
+<p id="userInfo"></p>
+</div>
+
+<div class="card">
+<h3>Chagua Course</h3>
+<button onclick="openCourse('business')">📊 Business</button>
+<button onclick="openCourse('graphics')">🎨 Graphics</button>
+<button onclick="openCourse('computer')">💻 Computer</button>
+</div>
+
+</div>
+
+<!-- COURSE -->
+<div id="course" class="section">
+<h2 id="courseTitle"></h2>
+
+<div class="card">
+<img src="https://via.placeholder.com/400x200">
+<p id="courseDesc"></p>
+</div>
+
+<div class="card">
+<h3>💰 Lipia</h3>
+<p>0795191608</p>
+</div>
+
+<button onclick="back()">⬅ Back</button>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+<button onclick="show('home')">🏠</button>
+<button onclick="show('course')">📚</button>
+</div>
+
+<script>
+
+function show(id){
+document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+}
+
+/* REGISTER */
+function register(){
+
+let file=document.getElementById("photo").files[0];
+let reader=new FileReader();
+
+reader.onload=function(){
+let user={
+name:name.value,
+phone:phone.value,
+country:country.value,
+region:region.value,
+district:district.value,
+gender:gender.value,
+education:education.value,
+dob:dob.value,
+id:idNumber.value,
+photo:reader.result
+};
+
+localStorage.setItem("user",JSON.stringify(user));
+show('login');
+};
+
+if(file){
+reader.readAsDataURL(file);
+}else{
+alert("Upload photo");
+}
+
+}
+
+/* LOGIN */
+function login(){
+let user=JSON.parse(localStorage.getItem("user"));
+
+if(user && loginName.value===user.name){
+
+show('home');
+
+welcome.innerText="Karibu "+user.name;
+profilePic.src=user.photo;
+
+userInfo.innerText=
+user.country+" | "+user.region+" | "+user.district+
+" | "+user.gender;
+
+}else{
+alert("Wrong name");
+}
+}
+
+/* COURSE */
+function openCourse(type){
+show('course');
+
+if(type==="business"){
+courseTitle.innerText="Business Course";
+courseDesc.innerText="Jifunze biashara kuanzia chini hadi juu.";
+}
+
+if(type==="graphics"){
+courseTitle.innerText="Graphics Design";
+courseDesc.innerText="Jifunze Photoshop na design.";
+}
+
+if(type==="computer"){
+courseTitle.innerText="Computer Maintenance";
+courseDesc.innerText="Jifunze computer repair.";
+}
+}
+
+function back(){show('home');}
+
+</script>
+
+</body>
+  </html>
